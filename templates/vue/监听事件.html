@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>VUE的监听事件</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <span>{{ age }}</span>
+        <button @click="changeage()">改变age</button>
+        <br />
+        <span>{{ message }}</span>
+        <button @click="changemessage()">改变message</button>
+        <button v-on:click.ctrl="warn('Form cannot be submitted yet.', $event)">
+            Submit
+        </button><br />
+        <input type="text" value="message">
+        <input type="text" value="message" v-model="message">
+        <br>
+
+
+        <template v-for="(value,index) in li">
+            <input type="checkbox" :id="input_id(index)" :value="input_id(index)" v-model="check">
+            <label>{{ value }}</label>
+        </template>
+
+        
+        <br>
+        <span>name : {{ check }}</span>
+
+        <br>
+        <input type="checkbox" id="checkbox" v-model="name">
+        <label for="checkbox">{{ name }}</label><br>
+
+
+        <template>
+            <select v-model="aa">
+                <option disabled selected="selected">请选择</option>
+                <template v-for="item in li">
+                    <option>{{ item }}</option>
+                </template>
+            </select>
+            <span>selected  : {{ aa }}</span>
+        </template>
+
+
+
+    </div>
+</body>
+<script>
+    var data = {
+        message: "message信息",
+        name: "焦盼鑫",
+        age: 18,
+        aa:'',
+        li: ["alice", "shark"],
+        check: [],
+    }
+
+    var app = new Vue({
+        el: "#app",
+        data: data,
+        methods: {
+            changeage: function () {
+                this.age = this.age + 1
+            },
+            changemessage: function () {
+                this.message = this.message + "a"
+            },
+            warn: function (message, event) {
+                // 现在我们可以访问原生事件对象
+                if (event) event.preventDefault()
+                alert(message)
+            },
+            input_id(index) {
+                return this.li[index]
+            }
+        }
+    })
+
+</script>
+
+</html>

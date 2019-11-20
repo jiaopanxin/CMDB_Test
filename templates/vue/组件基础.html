@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>组件基础</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <blog-post title="传参"></blog-post>
+        <blog-post title="aa"></blog-post>
+        <blog-post v-for="post in posts" v-bind:key="post.id" v-bind:title="post.title"></blog-post>
+        <button-counter></button-counter>
+    </div>
+</body>
+<script>
+    var data = {
+        message: "组件基础",
+        title: "标题",
+        posts: [{
+                id: 1,
+                title: 'My journey with Vue'
+            },
+            {
+                id: 2,
+                title: 'Blogging with Vue'
+            },
+            {
+                id: 3,
+                title: 'Why Vue is so fun'
+            }
+        ]
+    }
+    //这是一个全局组件
+    Vue.component('button-counter', {
+        data: function () { //注意组件的data需要是一个函数
+            return {
+                count: 0
+            }
+        },
+        template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+    })
+
+    Vue.component('blog-post', {
+        props: ["arg1"], // 通过props传数据
+        data: function () {
+            return {
+                content: "标题"
+            }
+        },
+        props: ['title'],
+        template: '<h3>{{ title }}</h3>',
+
+    })
+    var app = new Vue({
+        el: "#app",
+        data: data,
+        mounted() {
+
+        }
+    })
+
+</script>
+
+</html>

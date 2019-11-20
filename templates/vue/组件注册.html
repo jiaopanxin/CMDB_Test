@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>组件注册</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+<body>
+<div id="app">
+    {{ name }}
+    <button-counter></button-counter>
+    <com-1 name="22" title="11"></com-1>
+    <blog-post 
+        v-for="post in posts"
+        v-bind:key="post.title"
+        v-bind:titles="post.title"
+    ></blog-post>
+
+
+</div>
+</body>
+<script type="text/javascript">
+
+    var com1={
+        props:["name","title"],
+        template:"<button type='button'>{{ title }}</button>"
+        
+    }
+    Vue.component('blog-post', {
+      props: ['titles'],
+      template: '<h3>{{ titles }}</h3>'
+    })
+    Vue.component('button-counter', {
+        data: function () {
+            return {
+                count: 0
+            }
+        },
+        template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+    })
+    var app=new Vue({
+        el:"#app",
+        data:{
+            name:"组件注册",
+            posts: [
+              { id: 1, title: 'My journey with Vue' },
+              { id: 2, title: 'Blogging with Vue' },
+              { id: 3, title: 'Why Vue is so fun' }
+            ]
+        },
+        components:{
+            "com-1":com1,
+        }
+    })
+</script>
+</html>

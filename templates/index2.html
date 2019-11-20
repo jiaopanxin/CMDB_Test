@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block content %}
+<div id="main" style="width: 1000px;height:600px;"></div>
+
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+  function assetPie(arr){
+    var myChart = echarts.init(document.getElementById('main'));
+
+    // 指定图表的配置项和数据
+    option = {
+        legend: {},
+        tooltip: {},
+        dataset: {
+            source: arr
+        },
+        xAxis: {type: 'category'},
+        yAxis: {},
+        series: [
+            {type: 'bar'},
+            {type: 'bar'},
+            {type: 'bar'},
+            {type: 'bar'}
+            ]
+    };
+    
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+}
+
+
+$(function(){
+    $.getJSON(
+        '/dash/',
+        function(res){
+            assetPie(res)
+        }
+    )
+})
+
+</script>
+{% endblock %}

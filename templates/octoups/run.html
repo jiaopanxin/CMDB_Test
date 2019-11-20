@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<h1>操作指令</h1>
+{% endblock %}
+
+
+{% block content %}
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-3">
+            <a href="#" class="btn btn-primary btn-block margin-bottom" id="RunCommand">提交</a>
+            <!-- /. box -->
+            {% for inventerory in data %}
+            <div class="box box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">{{ inventerory.group_name }}</h3>
+
+                    <div class="box-tools">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse">
+                            <i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body no-padding">
+                    {% for server in inventerory.server.all %}
+                    <ul class="nav nav-pills nav-stacked">
+                        <li><a href="#"><i class="fa fa-circle-o text-red"></i> {{ server.manager_ip }}</a></li>
+
+                    </ul>
+                    {% endfor %}
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+            {% endfor %}
+            <!-- /.box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">操作指令</h3>
+
+                    <div class="box-tools pull-right">
+                        <div class="has-feedback">
+                            <input type="text" class="form-control input-sm" placeholder="Search Mail">
+                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </div>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+
+                    <div class="table-responsive mailbox-messages input-group" style="padding: 10px">
+                        <h3 style="display: inline-block">输入命令</h3>
+                        <!-- <form action="{% url 'octoups:run' %}" method="POST"> -->
+                        <!-- <form action="#" method="POST"> -->
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" name="message" id="command"
+                                placeholder="ansible all -m shell -a 'ls /opt'" class="form-control"
+                                style="width: 600px">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-warning btn-flat" id="pushcommand">Send</button>
+                            </span>
+                        </div>
+                        <!-- </form> -->
+                    </div>
+
+                    <!-- /.mail-box-messages -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer no-padding">
+
+                </div>
+            </div>
+            <!-- /. box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-9 col-sm-offset-3">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">操作指令</h3>
+
+                    <div class="box-tools pull-right">
+                        <div class="has-feedback">
+                            <input type="text" class="form-control input-sm" placeholder="Search Mail">
+                            <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                        </div>
+                    </div>
+                    <!-- /.box-tools -->
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding">
+
+                    <div class="table-responsive mailbox-messages input-group" style="padding: 10px">
+                        <span id="result_id"></span>
+                        <button type="button" id="display_result">命令结果展示</button>
+                    </div>
+
+                    <!-- /.mail-box-messages -->
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer no-padding">
+                    <span id="result"></span>
+                </div>
+            </div>
+            <!-- /. box -->
+        </div>
+    </div>
+    <!-- /.row -->
+</section>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    $("#pushcommand").on("click", function () {
+        let command = $("#command").val()
+        var csrfToken = $("[name='csrfmiddlewaretoken']").val();
+        console.log(command)
+        $.ajax({
+            url: "{% url 'octoups:run' %}",
+            type: "POST",
+            dataType: "json",
+            data: {
+                'csrfmiddlewaretoken': csrfToken,
+                "data": command
+            },
+            success: function (res) {
+                getresult(res.task_id)
+            },
+            error: function (res) {
+                console.log(res)
+            }
+        })
+    })
+
+    function getresult(task_id) {
+        var timer = setTimeout(function f(task_id) {
+            $.getJSON(
+                url = `/octoups/get_result/?task_id=${task_id}`,
+                function (ret) {
+                    if (ret.success) {
+                        console.log(ret.result)
+                        $("#result").append(`<div><code >${ret.id}</code><div>`)
+                        $("#result").append(`<div><code >${ret.status}</code><div>`)
+                        $("#result").append(`<div><code >任务结果${ret.result.result}</code><div>`);
+                        clearTimeout(timer);
+                    } else {
+                        $("#result").append(`<div><code >${ret.id}</code><div>`);
+                        $("#result").append(`<div><code >${ret.status}</code><div>`);
+                    };
+                }
+            )
+            timer = setTimeout(f, 2000, task_id);
+        }, 2000, task_id);
+    }
+
+</script>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+内容
+{% csrf_token %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3">
+        <input type="text">
+        <span>
+            <button class="btn btn-success" id="btn">发送</button>
+        </span>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <button type="button" class="btn btn-danger" id="get_result">获取结果</button>
+        <div><span id="result"></span></div>
+    </div>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    var task_id = ''
+    $(function () {
+        $("#btn").on("click", function () {
+            var csrfToken = $("[name='csrfmiddlewaretoken']").val();
+            let input = $(this).parent().siblings().first().val()
+            console.log(input)
+            $.ajax({
+                url: "/octoups/async/",
+                type: "POST",
+                data: {
+                    'csrfmiddlewaretoken': csrfToken,
+                    "num": input
+                },
+                success(ret) {
+                    task_id = ret.task_id
+                }
+            })
+        })
+
+        $("#get_result").on("click", function () {
+            $.ajax({
+                url: `/octoups/get_result/?task_id=${task_id}`,
+                type: "GET",
+                success(res) {
+                    console.log(res)
+                    $("#result").append(res.id)
+                }
+            })
+        })
+    })
+
+</script>
+
+{% endblock %}

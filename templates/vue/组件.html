@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>组件注册</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+</head>
+<body>
+<div id="app">
+	{{ title }}
+	<jubu1 titles="titles" name="name"></jubu1>
+
+</div>
+</body>
+
+<script type="text/javascript">
+	let jubu1={
+		props:["titles","name"],
+		template:"<div>\
+					           <p>{{ titles }}</p> \
+					           <p>{{ name }}</p>\
+		           			</div>"
+	}
+	var app=new Vue({
+		el:"#app",
+		data:{
+			title:"组件注册页"
+		},
+		components:{
+			"jubu1":jubu1
+		}
+	})
+
+</script>
+</html>

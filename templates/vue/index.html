@@ -1,0 +1,24 @@
+{% extends "base.html %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+<div id="app">
+    {{ message }}
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+    var app = new Vue({
+        el: "#app",
+        data: {
+            message: "vue学习"
+        }
+    })
+
+</script>
+
+{% endblock %}

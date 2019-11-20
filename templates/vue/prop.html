@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>prop</title>
+	<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+	<h1>{{ msg }}</h1>
+	<h1 :title="name">{{ name }}</h1>
+	<button type="button" @click="change()">点击</button>
+	<input type="text" name="name" v-model="name">
+	<span v-text="rawhtml"></span>
+	<span v-html="rawhtml"></span>
+	<div v-if="logType==='username'">
+            使用用户名登录<input type="text" key="username">
+        </div>
+        <div v-else="logType==='email'">
+            使用邮箱登录<input type="email" key="email">
+        </div>
+        <p v-show="flag">{{ name }}</p>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+	var app=new Vue({
+		el:"#app",
+		data:{
+			msg:"hello vue",
+			name:"喜欢你",
+			rawhtml:"<p>焦盼鑫</p>",
+			logType:"username",
+			flag:"False"
+
+		},
+		methods:{
+			change:function(){
+				this.logType="email"
+			}
+		}
+	})
+</script>
+</html>

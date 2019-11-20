@@ -1,0 +1,15 @@
+[web-server]
+10.0.122.124  log_path=/web-server
+
+[nginx]
+10.0.122.39  log_path=/nginx
+
+[web-server:vars]
+port=80
+
+[nginx:vars]
+port=8080
+
+[parent:children]
+nginx
+web-server

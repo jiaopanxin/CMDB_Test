@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div>
+    {% csrf_token %}
+    <div class="form-group has-warning">
+        <label class="control-label" for="inputWarning"><i class="fa fa-bell-o"></i>主机清单文件路径</label>
+        <input type="text" class="form-control" id="path" placeholder="输入文件路径"
+            value="/home/alice/项目/jpx/auto_cmdb/auto_cmdb/octoups/inventory/hosts">
+        <span class="help-block"></span>
+    </div>
+    <div class="form-group">
+        <label>connection</label>
+        <select class="form-control" id="connection">
+            <option value="smart">smart</option>
+            <option value="local">local</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>remote_user</label>
+        <select class="form-control" id="remote_user">
+            <option value="root">root</option>
+            <option value="stus">stus</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>模块</label>
+        <select class="form-control" id="model">
+            <option value="shell">shell</option>
+            <option value="ping">ping</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>命令参数</label>
+        <input type="text" class="form-control" id="args" placeholder=" 输入模块参数">
+        <span class="help-block"></span>
+    </div>
+    <div class="form-group">
+        <label>hosts</label>
+        <select class="form-control" id="group">
+            <option value="web-server">web-server</option>
+            <option value="all" selected="selected">all</option>
+            <option value="nginx">nginx</option>
+        </select>
+    </div>
+    <button class="btn btn-success" id="btn" type="button">提交</button>
+    <div>
+        <span id="display_result"></span>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+    var task_id = ''
+    $(function () {
+        function getresult(task_id) {
+            var timer = setTimeout(function f(task_id) {
+                $.getJSON(
+                    url = `/octoups/get_result/?task_id=${task_id}`,
+                    function (ret) {
+                        console.log(ret)
+                        if (ret.success) {
+                            $("#display_result").append(`<div><code >${ret.id}</code><div>`)
+                            $("#display_result").append(`<div><code >${ret.status}</code><div>`)
+                            $("#display_result").append(
+                            `<div><code >任务结果${ret.result}</code><div>`);
+                            clearTimeout(timer);
+                        } else {
+                            $("#display_result").append(`<div><code >${ret.id}</code><div>`);
+                            $("#display_result").append(`<div><code >${ret.status}</code><div>`);
+                        };
+                    }
+                )
+                timer = setTimeout(f, 2000, task_id);
+            }, 2000, task_id);
+        }
+
+        $("#btn").on("click", function () {
+            var inv_path = $("#path").val()
+            var remote_user = $("#remote_user").val()
+            var connection = $("#connection").val()
+            var model = $("#model").val()
+            var group = $("#group").val()
+            var args = $("#args").val()
+
+
+            $.ajax({
+                url: "{% url 'octoups:anisble-hoc' %}",
+                type: "POST",
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}',
+                    "inv_path": inv_path,
+                    "remote_user": remote_user,
+                    "connection": connection,
+                    "model": model,
+                    "group": group,
+                    "args": args
+                },
+                success: function (res) {
+                    task_id = res.task_id
+                    getresult(task_id)
+                }
+            })
+
+        })
+
+
+    })
+
+</script>
+
+
+{% endblock %}

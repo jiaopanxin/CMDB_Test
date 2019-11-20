@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<section class="content">
+
+    <div class="row" id="app">
+        <div class="col-md-3">
+
+            <!-- Profile Image -->
+            <div class="box box-primary">
+                <div class="box-body box-profile">
+                    <img class="profile-user-img img-responsive img-circle"
+                        src="../../static/wKgGTFWU0s6AbDTpAANAIfUdnEk068_600_600.jpg" alt="User profile picture"
+                        height="200px" width="100px">
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
+        </div>
+        <div class="col-md-9">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active"><a href="#activity" data-toggle="tab">服务器信息</a></li>
+                    <li><a href="#timeline" data-toggle="tab">硬盘信息</a></li>
+                    <li><a href="#settings" data-toggle="tab">内存信息</a></li>
+                </ul>
+                <div class="tab-content">
+
+                    <div class="active tab-pane" id="activity">
+                        <div class="post">
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <b>操作系统</b> <a class="pull-right">{{ info.os_name  }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>系统架构</b> <a class="pull-right">{{ info.machine }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>系统版本</b> <a class="pull-right">{{ info.os_version }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>主机名</b> <a class="pull-right">{{ info.host_name }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>内核信息</b> <a class="pull-right">{{ info.kernel }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>cpu名称</b> <a class="pull-right">{{ info.cpu_model }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>cpu类型</b> <a class="pull-right">{{ info.cpu_type }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>cpu物理颗数</b> <a class="pull-right">{{ info.cpu_num }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>每颗cpu核心数</b> <a class="pull-right">{{ info.cpu_cores }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>更新时间</b> <a class="pull-right">{{ info.latest_date }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>创建时间</b> <a class="pull-right">{{ info.create_at }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <input type="button" name="delete" value="删除" onclick="del()">
+                        <!-- /.post -->
+                    </div>
+                    <div class="tab-pane" id="timeline">
+                        <div class="post">
+                            {% for item in info.disk.all %}
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <b>id</b> <a class="pull-right">{{ item.id  }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>插槽</b> <a class="pull-right">{{ item.slot_number }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>类型</b> <a class="pull-right">{{ item.pd_type }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>大小</b> <a class="pull-right">{{ item.raw_size }}</a>
+                                </li>
+                            </ul>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="settings">
+                        <div class="post">
+                            {% for item in info.memory.all %}
+                            <ul class="list-group list-group-unbordered">
+                                <li class="list-group-item">
+                                    <b>id</b> <a class="pull-right">{{ item.id }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>内存容量</b> <a class="pull-right">{{ item.capacity }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>插槽</b> <a class="pull-right">{{ item.slot }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>内存类型</b> <a class="pull-right">{{ item.model }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>速率</b> <a class="pull-right">{{ item.speed }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>内存厂商</b> <a class="pull-right">{{ item.manufacturer }}</a>
+                                </li>
+                                <li class="list-group-item">
+                                    <b>产品序列号</b> <a class="pull-right">{{ item.sn }}</a>
+                                </li>
+                            </ul>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <!-- /.tab-pane -->
+                </div>
+
+
+            </div>
+            <!-- /.nav-tabs-custom -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+
+</section>
+
+
+{% endblock %}

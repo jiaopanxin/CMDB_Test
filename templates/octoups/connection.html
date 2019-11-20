@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- 显示的字段 
+        服务器的主机名  ip  用户名  密码  端口  是否认证-->
+{%  csrf_token %}
+<div class="col-xs-12">
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">用户公钥认证</h3>
+
+            <div class="box-tools">
+                <div class="input-group input-group-sm hidden-xs" style="width: 150px;">
+                    <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+
+                    <div class="input-group-btn">
+                        <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div class="box-body table-responsive no-padding">
+            <table class="table table-hover">
+                <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <th>服务器主机名</th>
+                        <th>ip</th>
+                        <th>用户名</th>
+                        <th>端口</th>
+                        <th>是否认证</th>
+                        <th>点击推送公钥</th>
+                    </tr>
+                    {% for server in connection %}
+                    <tr>
+                        <td>{{ server.id  }}</td>
+                        <td>{{ server.host_name }}</td>
+                        <td>{{ server.manager_ip }}</td>
+                        <td>{{ server.connection.user }}</td>
+                        <td>{{ server.connection.port }}</td>
+                        {% if server.connection.auth %}
+                        <td>
+                            <span class="label label-success">{{ server.connection.auth }}</span>
+                        </td>
+                        {% else %}
+                        <td>
+                            <span class="label label-warning ">{{ server.connection.auth }}</span>
+                        </td>
+                        {% endif %}
+                        <td><span class="label label-success pushPubKey ">点击推送公钥</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(".pushPubKey").on("click", function () {
+        let authed = '<span class="label label-success" > True </span>';
+        let authedNot = '<span class="label label-danger"> False </span>';
+
+
+        let id = $(this).parent().siblings().first().text()
+        let statusTag = $(this).parent().siblings().last()
+        var csrfToken = $("[name='csrfmiddlewaretoken']").val();
+
+        $.ajax({
+            url: "{% url 'octoups:connection' %}",
+            type: "POST",
+            data: {
+                'csrfmiddlewaretoken': csrfToken,
+                "server_id": id
+            },
+            success: function (res) {
+                if (res.status) {
+                    alert("免密连接成功")
+                    statusTag.html(authed);
+                } else {
+                    alert("免密连接失败")
+                }
+            }
+        })
+    })
+
+</script>
+{% endblock %}

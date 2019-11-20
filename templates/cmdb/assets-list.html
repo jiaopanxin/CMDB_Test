@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="box">
+
+    <div class="box-header">
+        <h3 class="box-title">资产信息表</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body" id="app">
+        <div id="example2_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+            <div class="row">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-6"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <table id="example2" class="table table-bordered table-hover dataTable" role="grid"
+                        aria-describedby="example2_info">
+                        <thead>
+                            <tr role="row">
+                                <th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                                    aria-sort="ascending"
+                                    aria-label="Rendering engine: activate to sort column descending">ID
+                                </th>
+                    
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending">资产类型</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                                    aria-label="Engine version: activate to sort column ascending">资产状态</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                                    aria-label="Platform(s): activate to sort column ascending">所属机柜号</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                                    aria-label="Engine version: activate to sort column ascending">最近查看时间</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                                    aria-label="CSS grade: activate to sort column ascending">所属服务器</th>
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                                    aria-label="CSS grade: activate to sort column ascending">详情</th>         
+                                <th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1"
+                                    aria-label="CSS grade: activate to sort column ascending">选项</th>
+                                    
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for asset in assetList %}
+                            <!-- <tr v-for="item in servers.results" :key=""> -->
+                                <tr>
+                                <th scope="row">{{ asset.id }}</th>
+                                <!-- <td>{{ item.name }}</td> -->
+                                <td>{{ asset.get_device_type_id_display }}</td>
+                                <td>{{ asset.get_device_status_id_display }}</td>
+                                <td>{{ asset.cabinet }}</td>
+                                <td>{{ asset.latest_date }}</td>
+                                <td>{{ asset.server.host_name }}</td>
+                                <td><a href="{% url 'cmdb:asset-detail' asset.server.id %}">详情</a></td>
+                                <td rowspan="1" colspan="1"><a href="/xadmin">修改资产信息</a></td>
+
+                            </tr>
+                                {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th rowspan="1" colspan="1">ID</th>
+                                <th rowspan="1" colspan="1">资产类型</th>
+                                <th rowspan="1" colspan="1">资产状态</th>
+                                <th rowspan="1" colspan="1">所属机柜号</th>
+                                <th rowspan="1" colspan="1">最近查看时间</th>
+                                <th rowspan="1" colspan="1">创建时间</th>
+                                <th rowspan="1" colspan="1">详情</th>
+                                <th rowspan="1" colspan="1">选项</th>
+
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+
+{% endblock %}
+
+
+
+
+<!-- {% block script %}
+<script>
+    // 创建一个 VUE 实例
+    var app = new Vue({
+        // el: 挂载点
+        el: "#app",
+        // 声明数据 在模版中使用的
+        data: {
+            // assets: '',
+            servers: [],
+        },
+        methods: {
+            getAssetsData(url) {
+                axios.get(
+                    url,
+                ).then(
+                    res => {
+                        this.servers = res.data;
+                    });
+            },
+            del() {       
+                console.log("sadsadas")
+            }
+
+        },
+        //
+        mounted() {
+            axios.get("http://127.0.0.1:8000/cmdb/assets/").then(res => {
+                // console.log(res.data);
+                this.servers = res.data;
+            });
+        }
+    })
+
+
+
+</script>
+{% endblock %} -->
+
+<!-- ajax 获取数据 -->
+
+<!-- $(function () {
+    // 获取id为xxx的标签下的内容
+    let tb = $("#tb")
+    // 为id为xxx的标签绑定事件
+    $("#btn").on('click', function(){
+        $.ajax({
+            // 发送请求 的 url 地址
+            // 可以是 路由路径，也可以是http://
+            url: '{% url "api:ApiView" %}',
+            // 发送请求的方式
+            type: 'GET',
+            // 预期服务器返回的数据类型，一般取json格式，未指定则浏览器会智能判断
+            dataType: 'json',
+            // 是一个方法，请求成功后的回调函数。传入返回后的数据，以及包含成功代码的字符串
+            success: function(res){
+                // 定义一个变量
+                var tags = ''
+                // 循环获取到的值，并将其加到表中(如下)，
+                for (let item of res) {
+                    tags = tags + `   <tr>              
+                        <th scope="row"></th>                
+                        <td class="sorting_1">${item.id}</td>
+                        <td>${item.name}</td>
+                        <td>${item.cabinet}</td>
+                        <td>${item.latest_date}</td>
+                        <td>${item.create_at}</td>
+                </tr>`
+                }
+                // 将变量嵌入 获取到的id 对应的 内容 中
+                tb.html(tags)
+            }
+        });
+    })
+}) -->
+ 
