@@ -1,5 +1,5 @@
 amqp==2.5.1
-ansible==2.8.6
+ansible==2.9.20
 asgiref==3.2.2
 asn1crypto==0.24.0
 autopep8==1.4.4
