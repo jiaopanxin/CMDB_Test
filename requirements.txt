@@ -50,7 +50,7 @@ msgpack==0.6.2
 mysqlclient==1.4.4
 odfpy==1.4.0
 openpyxl==2.6.3
-paramiko==2.6.0
+paramiko==2.10.1
 parso==0.5.1
 pbr==5.4.3
 pexpect==4.7.0
