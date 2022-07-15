@@ -18,7 +18,7 @@ decorator==4.4.0
 defusedxml==0.6.0
 diff-match-patch==20181111
 Django==2.1.5
-django-celery-results==1.1.2
+django-celery-results==2.4.0
 django-cors-headers==3.1.1
 django-crispy-forms==1.7.2
 django-debug-toolbar==2.0
